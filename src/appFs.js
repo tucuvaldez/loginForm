@@ -1,19 +1,19 @@
-import express from "express";
-import session from "express-session";
-import storage from "session-file-store";
+// import express from "express";
+// import session from "express-session";
+// import storage from "session-file-store";
 
-const app = express();
-const PORT = process.env.PORT || 3000;
-const FileStore = storage(session);
+// const app = express();
+// const PORT = process.env.PORT || 3000;
+// const FileStore = storage(session);
 
-app.use(
-  session({
-    store: new FileStore({ path: "./sessions", ttl: 200, retries: 0 }),
-    secret: "secretWord4321",
-    resave: false,
-    saveUninitialized: false,
-  })
-);
+// app.use(
+//   session({
+//     store: new FileStore({ path: "./sessions", ttl: 200, retries: 0 }),
+//     secret: "secretWord4321",
+//     resave: false,
+//     saveUninitialized: false,
+//   })
+// );
 
 // app.get("/", (req, res) => {
 //   req.session.user = { nombre: "Tucu", role: "admin" };
