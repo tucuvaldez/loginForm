@@ -6,6 +6,8 @@ import __dirname from "./utils.js";
 import viewsRouter from "./routes/views.router.js";
 import sessionsRouter from "./routes/sessions.router.js";
 import mongoose from "mongoose";
+import passport from "passport";
+import initializeStrategies from "./config/passport.config.js";
 
 const app = express();
 const PORT = process.env.PORT || 3000;
@@ -25,6 +27,9 @@ app.use(
     cookie: { maxAge: 30000 },
   })
 );
+initializeStrategies();
+app.use(passport.initialize());
+app.use(passport.session());
 
 //Inicializar el motor
 app.engine("handlebars", handlebars.engine());

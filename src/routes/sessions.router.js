@@ -1,5 +1,7 @@
 import { Router } from "express";
+import passport from "passport";
 import userModel from "../models/User.js";
+import { createHash } from "../utils.js";
 
 const router = Router();
 
@@ -14,39 +16,33 @@ router.post("/register", async (req, res) => {
     return res
       .status(400)
       .send({ status: "error", success: false, error: "El usuario ya existe" });
+  const hashedPassword = await createHash(password);
   const result = await userModel.create({
     first_name,
     last_name,
     email,
-    password,
+    password: hashedPassword,
   });
   res.send({ status: "success", success: true, payload: result });
 });
 
-router.post("/login", async (req, res) => {
-  const { email, password } = req.body;
-  if (!email || !password)
-    return res.status(400).send({
-      status: "error",
-      success: false,
-      message: "Valores incompletos",
-    });
-  const user = await userModel.findOne({ email, password });
-  if (!user) {
-    return res.status(400).send({
-      status: "error",
-      success: false,
-      message: "Correo o contraseña invalido",
-    });
+router.post(
+  "/login",
+  passport.authenticate("login", {
+    failureRedirect: "/api/sessions/loginFail",
+    failureMessage: true,
+  }),
+  async (req, res) => {
+    const user = req.user;
+    req.session.user = {
+      id: user._id,
+      name: user.first_name,
+      email: user.email,
+      role: user.role,
+    };
+    res.send({ status: "success", success: true, message: "Estas Logueado" });
   }
-  req.session.user = {
-    id: user._id,
-    name: user.first_name,
-    email: user.email,
-    role: user.role,
-  };
-  res.send({ status: "success", success: true, message: "Estas Logueado" });
-});
+);
 
 router.get("/logout", async (req, res) => {
   const user = req.session.user;
@@ -68,6 +64,12 @@ router.get("/logout", async (req, res) => {
   } catch (err) {
     console.log(err);
   }
+});
+router.get("/loginFail", (req, res) => {
+  console.log(req.session.messages);
+  if (req.session.messages.length > 3)
+    return res.status(400).send({ message: "Bloquear intentos" });
+  res.status(400).send({ status: "error", message: "Error de autenticacion" });
 });
 
 export default router;
