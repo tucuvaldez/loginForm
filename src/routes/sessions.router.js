@@ -48,23 +48,26 @@ router.post("/login", async (req, res) => {
   res.send({ status: "success", success: true, message: "Estas Logueado" });
 });
 
-router.post("/logout", async (req, res) => {
-  req.session.destroy((err) => {
-    if (err) {
-      console.log(err);
-      res.status(400).send({
-        status: "error",
-        succes: false,
-        message: "El deslogueo ha fallado",
-      });
-    } else {
-      res.send({
-        status: "success",
-        success: true,
-        message: "Te has deslogueado",
-      });
-    }
-  });
+router.get("/logout", async (req, res) => {
+  const user = req.session.user;
+  try {
+    req.session.destroy((err) => {
+      if (err) {
+        console.log(err);
+        res.status(400).send({
+          status: "error",
+          succes: false,
+          message: "El deslogueo ha fallado",
+        });
+      } else {
+        res.render("logout", {
+          user: user,
+        });
+      }
+    });
+  } catch (err) {
+    console.log(err);
+  }
 });
 
 export default router;

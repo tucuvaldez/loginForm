@@ -1,9 +1,7 @@
 <h1>Bienvenido {{user.name}}</h1>
 
-<form method="POST" action="/logout">
+<form method="get" action="/api/sessions/logout">
   <button id="loggedOut">
     Desloguearse
   </button>
 </form>
-
-<script src="./js/home.js"></script>
