@@ -69,7 +69,7 @@ router.get("/loginFail", (req, res) => {
   console.log(req.session.messages);
   if (req.session.messages.length > 3)
     return res.status(400).send({ message: "Bloquear intentos" });
-  res.status(400).send({ status: "error", message: "Error de autenticacion" });
+  res.status(400).send({ status: "error", error: "Error de autenticacion" });
 });
 
 export default router;

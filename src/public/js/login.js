@@ -7,7 +7,6 @@ form.addEventListener("submit", (evt) => {
   data.forEach((value, key) => (obj[key] = value));
   fetch("/api/sessions/login", {
     method: "POST",
-    redirect: "manual",
     body: JSON.stringify(obj),
     headers: {
       "Content-Type": "application/json",
@@ -18,7 +17,7 @@ form.addEventListener("submit", (evt) => {
       if (data.success) {
         window.location.assign("home");
       } else {
-        alert("Error: " + data.message);
+        alert("Error: " + data.error);
       }
       console.log(data);
     });
