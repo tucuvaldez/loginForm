@@ -15,6 +15,8 @@ form.addEventListener("submit", (evt) => {
     .then((result) => result.json())
     .then((data) => {
       if (data.success) {
+        console.log(data);
+        // localStorage.setItem("authToken", data.token);
         window.location.assign("home");
       } else {
         alert("Error: " + data.error);

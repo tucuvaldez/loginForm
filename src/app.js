@@ -10,7 +10,7 @@ import passport from "passport";
 import initializeStrategies from "./config/passport.config.js";
 
 const app = express();
-const PORT = process.env.PORT || 3000;
+const PORT = process.env.PORT || 8080;
 mongoose.set("strictQuery", false);
 const connection = mongoose.connect(
   "mongodb+srv://admin:1234@login.atwudct.mongodb.net/comision31840?retryWrites=true&w=majority"
