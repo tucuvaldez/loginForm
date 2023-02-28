@@ -23,4 +23,17 @@ router.get("/home", (req, res) => {
 router.get("/logout", (req, res) => {
   res.render("logout");
 });
+
+router.get("/info", (req, res) => {
+  res.json({
+    server: {
+      "Directorio actual de trabajo ": process.cwd(),
+      "Id del proceso": process.pid,
+      "Version de Node": process.version,
+      "Titulo del proceso": process.title,
+      "Sistema operativo": process.platform,
+      "Uso de la Memoria": process.memoryUsage(),
+    },
+  });
+});
 export default router;

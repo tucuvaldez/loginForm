@@ -83,11 +83,7 @@ router.get("/githubcallBack", passport.authenticate("github"), (req, res) => {
     email: user.email,
     role: user.role,
   };
-  // res.send({
-  //   status: "success",
-  //   success: true,
-  //   message: "Logueado con Github",
-  // });
+
   res.render("home", { user: req.session.user });
 });
 
@@ -106,15 +102,28 @@ router.post("/logintoken", async (req, res) => {
     role: user.role,
     email: user.email,
   };
-  const token = jwt.sign(tokenizedUser, "Clav3S3cre3ta", { expiresIn: "1d" });
+  const token = jwt.sign(tokenizedUser, config.jwt.SECRET, { expiresIn: "1d" });
   res.send({ status: "success", success: true, message: "Logueado", token });
 });
 
 router.get("/current", (req, res) => {
   const { token } = req.query;
-  const user = jwt.verify(token, "Clav3S3cre3ta");
+  const user = jwt.verify(token, config.jwt.SECRET);
   console.log(user);
   res.send({ status: "success", payload: user });
 });
+
+// router.get("/info", (req, res) => {
+//   res.json({
+//     server: {
+//       cwd: process.cwd(),
+//       id: process.pid,
+//       version: process.version,
+//       title: process.title,
+//       so: process.platform,
+//       memory: process.memoryUsage(),
+//     },
+//   });
+//   });
 
 export default router;

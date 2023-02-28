@@ -8,20 +8,20 @@ import sessionsRouter from "./routes/sessions.router.js";
 import mongoose from "mongoose";
 import passport from "passport";
 import initializeStrategies from "./config/passport.config.js";
+import config from "./config/config.js";
+import { minimistconfig } from "./config/minimist.js";
 
 const app = express();
-const PORT = process.env.PORT || 8080;
+const PORT = minimistconfig.port || 8080;
 mongoose.set("strictQuery", false);
-const connection = mongoose.connect(
-  "mongodb+srv://admin:1234@login.atwudct.mongodb.net/comision31840?retryWrites=true&w=majority"
-);
+const connection = mongoose.connect(config.mongo.MONGO_URL);
 app.use(
   session({
     store: MongoStore.create({
-      mongoUrl: `mongodb+srv://admin:1234@login.atwudct.mongodb.net/comision31840?retryWrites=true&w=majority`,
+      mongoUrl: config.mongo.MONGO_URL,
       ttl: 60,
     }),
-    secret: "secretWord4321",
+    secret: config.session.SECRET,
     resave: false,
     saveUninitialized: false,
     cookie: { maxAge: 30000 },
