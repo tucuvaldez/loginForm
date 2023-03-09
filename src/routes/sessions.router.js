@@ -113,6 +113,21 @@ router.get("/current", (req, res) => {
   res.send({ status: "success", payload: user });
 });
 
+router.get("/google", passport.authenticate("google"), async (req, res) => {});
+router.get(
+  "/googlecallback",
+  passport.authenticate("google"),
+  async (req, res) => {
+    const user = req.user;
+    req.session.user = { id: user.id, email: user.email, role: user.role };
+    res.send({
+      status: "success",
+      payload: user,
+      message: "Logueado con google",
+    });
+  }
+);
+
 // router.get("/info", (req, res) => {
 //   res.json({
 //     server: {

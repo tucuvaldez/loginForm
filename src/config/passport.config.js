@@ -3,6 +3,7 @@ import local from "passport-local";
 import userModel from "../models/User.js";
 import { validatePassword } from "../utils.js";
 import GithubStrategy from "passport-github2";
+import GoogleStrategy from "passport-google-oidc";
 
 const LocalStrategy = local.Strategy;
 
@@ -47,6 +48,22 @@ const initializeStrategies = () => {
           return done(null, result);
         }
         done(null, user);
+      }
+    )
+  );
+
+  passport.use(
+    "google",
+    new GoogleStrategy(
+      {
+        clientID:
+          "324437827429-gpn8ane6oqvbetlhackt6ff43urn98uf.apps.googleusercontent.com",
+        clientSecret: "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",
+        callbackURL: "http://localhost/8080/api/sessions/googlecallback",
+      },
+      async (issuer, profile, done) => {
+        console.log(profile);
+        done(null, false);
       }
     )
   );
