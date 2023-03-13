@@ -10,8 +10,11 @@ import passport from "passport";
 import initializeStrategies from "./config/passport.config.js";
 import config from "./config/config.js";
 import { minimistconfig } from "./config/minimist.js";
+import cluster from "cluster";
+import os from "os";
 
 const app = express();
+const CPUs = os.cpus().length;
 const PORT = minimistconfig.port || 8080;
 mongoose.set("strictQuery", false);
 const connection = mongoose.connect(config.mongo.MONGO_URL);
@@ -44,7 +47,19 @@ app.use(express.urlencoded({ extended: true }));
 app.use("/", viewsRouter);
 app.use("/api/sessions", sessionsRouter);
 
-app.listen(PORT, () => {
-  console.log(`Listening on port: http://localhost:${PORT} 
-`);
-});
+if (cluster.isPrimary) {
+  console.log(
+    `Proceso primario en PID: ${process.pid}. Generando procesos hijos`
+  );
+  for (let i = 0; i < CPUs; i++) {
+    cluster.fork();
+  }
+  cluster.on("exit", (worker) => {
+    cluster.fork();
+  });
+} else {
+  console.log(`Proceso worker en PID: ${process.pid}`);
+  app.listen(PORT, () => {
+    console.log(`Listening on port: http://localhost:${PORT}`);
+  });
+}

@@ -35,7 +35,6 @@ const initializeStrategies = () => {
         callbackURL: "http://localhost:8080/api/sessions/githubcallBack",
       },
       async (accessToken, refreshToken, profile, done) => {
-        console.log(profile);
         const { name, email } = profile._json;
         const user = await userModel.findOne({ email });
         if (!user) {
@@ -75,7 +74,7 @@ const initializeStrategies = () => {
             email,
             password: "",
           };
-          let result = await userModel.save(newUser);
+          let result = await userModel.create(newUser);
           return done(null, result);
         } else {
           //Si existe, lo devuelvo
