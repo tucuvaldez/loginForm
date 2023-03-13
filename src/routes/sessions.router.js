@@ -113,7 +113,11 @@ router.get("/current", (req, res) => {
   res.send({ status: "success", payload: user });
 });
 
-router.get("/google", passport.authenticate("google"), async (req, res) => {});
+router.get(
+  "/google",
+  passport.authenticate("google", { scope: ["email", "profile"] }),
+  async (req, res) => {}
+);
 router.get(
   "/googlecallback",
   passport.authenticate("google"),
@@ -128,17 +132,17 @@ router.get(
   }
 );
 
-// router.get("/info", (req, res) => {
-//   res.json({
-//     server: {
-//       cwd: process.cwd(),
-//       id: process.pid,
-//       version: process.version,
-//       title: process.title,
-//       so: process.platform,
-//       memory: process.memoryUsage(),
-//     },
-//   });
-//   });
+router.get("/info", (req, res) => {
+  res.json({
+    server: {
+      cwd: process.cwd(),
+      id: process.pid,
+      version: process.version,
+      title: process.title,
+      so: process.platform,
+      memory: process.memoryUsage(),
+    },
+  });
+});
 
 export default router;

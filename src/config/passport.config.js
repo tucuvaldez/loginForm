@@ -59,11 +59,28 @@ const initializeStrategies = () => {
         clientID:
           "324437827429-gpn8ane6oqvbetlhackt6ff43urn98uf.apps.googleusercontent.com",
         clientSecret: "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",
-        callbackURL: "http://localhost/8080/api/sessions/googlecallback",
+        callbackURL: "http://localhost:8080/api/sessions/googlecallback",
       },
       async (issuer, profile, done) => {
         console.log(profile);
-        done(null, false);
+        const firstName = profile.name.givenName;
+        const lastName = profile.name.familyName;
+        const email = profile.emails[0].value;
+        const user = await userModel.findOne({ email });
+        if (!user) {
+          //Si no existe lo registro
+          const newUser = {
+            first_name: firstName,
+            last_name: lastName,
+            email,
+            password: "",
+          };
+          let result = await userModel.save(newUser);
+          return done(null, result);
+        } else {
+          //Si existe, lo devuelvo
+          return done(null, user);
+        }
       }
     )
   );
