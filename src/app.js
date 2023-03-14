@@ -15,7 +15,7 @@ import os from "os";
 
 const app = express();
 const CPUs = os.cpus().length;
-const PORT = minimistconfig.port || 8080;
+const PORT = process.env.PORT || 5000;
 mongoose.set("strictQuery", false);
 const connection = mongoose.connect(config.mongo.MONGO_URL);
 app.use(
@@ -54,9 +54,9 @@ if (cluster.isPrimary) {
   for (let i = 0; i < CPUs; i++) {
     cluster.fork();
   }
-  cluster.on("exit", (worker) => {
-    cluster.fork();
-  });
+  // cluster.on("exit", (worker) => {
+  //   cluster.fork();
+  // });
 } else {
   console.log(`Proceso worker en PID: ${process.pid}`);
   app.listen(PORT, () => {
