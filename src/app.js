@@ -14,6 +14,7 @@ import cluster from "cluster";
 import os from "os";
 
 const app = express();
+const CPUs = os.cpus().length;
 const PORT = minimistconfig.port || 8080;
 
 if (cluster.isPrimary && minimistconfig.mode.toLowerCase() === "cluster") {
