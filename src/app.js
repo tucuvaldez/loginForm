@@ -14,52 +14,56 @@ import cluster from "cluster";
 import os from "os";
 
 const app = express();
-const CPUs = os.cpus().length;
-const PORT = process.env.PORT || 5000;
-mongoose.set("strictQuery", false);
-const connection = mongoose.connect(config.mongo.MONGO_URL);
-app.use(
-  session({
-    store: MongoStore.create({
-      mongoUrl: config.mongo.MONGO_URL,
-      ttl: 60,
-    }),
-    secret: config.session.SECRET,
-    resave: false,
-    saveUninitialized: false,
-    cookie: { maxAge: 30000 },
-  })
-);
-initializeStrategies();
-app.use(passport.initialize());
-app.use(passport.session());
+const PORT = minimistconfig.port || 8080;
 
-//Inicializar el motor
-app.engine("handlebars", handlebars.engine());
-app.set("views", `${__dirname}/views`);
-app.set("view engine", "handlebars");
-
-app.use(express.static(`${__dirname}/public`));
-app.use(express.json());
-app.use(express.urlencoded({ extended: true }));
-
-//Routers
-app.use("/", viewsRouter);
-app.use("/api/sessions", sessionsRouter);
-
-if (cluster.isPrimary) {
-  console.log(
-    `Proceso primario en PID: ${process.pid}. Generando procesos hijos`
-  );
-  for (let i = 0; i < CPUs; i++) {
-    cluster.fork();
+if (cluster.isPrimary && minimistconfig.mode.toLowerCase() === "cluster") {
+  try {
+    console.log(
+      `Servidor levantado. PORT: ${minimistconfig.port} - Server mode: ${minimistconfig.mode}`
+    );
+    for (let i = 0; i < CPUs; i++) {
+      cluster.fork();
+    }
+    cluster.on("exit", (worker) => {
+      cluster.fork();
+    });
+  } catch (err) {
+    console.log(err);
   }
-  // cluster.on("exit", (worker) => {
-  //   cluster.fork();
-  // });
 } else {
+  mongoose.set("strictQuery", false);
+  const connection = mongoose.connect(config.mongo.MONGO_URL);
+  app.use(
+    session({
+      store: MongoStore.create({
+        mongoUrl: config.mongo.MONGO_URL,
+        ttl: 60,
+      }),
+      secret: config.session.SECRET,
+      resave: false,
+      saveUninitialized: false,
+      cookie: { maxAge: 30000 },
+    })
+  );
+  initializeStrategies();
+  app.use(passport.initialize());
+  app.use(passport.session());
+
+  //Inicializar el motor
+  app.engine("handlebars", handlebars.engine());
+  app.set("views", `${__dirname}/views`);
+  app.set("view engine", "handlebars");
+
+  app.use(express.static(`${__dirname}/public`));
+  app.use(express.json());
+  app.use(express.urlencoded({ extended: true }));
+
+  //Routers
+  app.use("/", viewsRouter);
+  app.use("/api/sessions", sessionsRouter);
+
   console.log(`Proceso worker en PID: ${process.pid}`);
-  app.listen(PORT, () => {
-    console.log(`Listening on port: http://localhost:${PORT}`);
+  app.listen(minimistconfig.port, () => {
+    console.log(`Listening on port: http://localhost:${minimistconfig.port}`);
   });
 }
