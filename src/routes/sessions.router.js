@@ -9,14 +9,16 @@ const router = Router();
 router.post("/register", async (req, res) => {
   const { first_name, last_name, email, password } = req.body;
   if (!first_name || !email || !password)
-    return res
-      .status(400)
-      .send({ status: "error", success: false, error: "Valores incompletos" });
+    req.logger.warn("Faltan campos por completar");
+  // return res
+  //   .status(400)
+  //   .send({ status: "error", success: false, error: "Valores incompletos" });
   const exists = await userModel.findOne({ email });
   if (exists)
-    return res
-      .status(400)
-      .send({ status: "error", success: false, error: "El usuario ya existe" });
+    // return res
+    //   .status(400)
+    //   .send({ status: "error", success: false, error: "El usuario ya existe" });
+    req.logger.warn("El usuario ya está registrado");
   const hashedPassword = await createHash(password);
   const result = await userModel.create({
     first_name,
@@ -24,6 +26,7 @@ router.post("/register", async (req, res) => {
     email,
     password: hashedPassword,
   });
+  req.logger.info(`El usuario ${result.first_name} fue registrado con éxito `);
   res.send({ status: "success", success: true, payload: result });
 });
 
@@ -41,6 +44,7 @@ router.post(
       email: user.email,
       role: user.role,
     };
+    req.logger.info(`El usuario ${user.first_name} fue logueado con éxito`);
     res.send({ status: "success", success: true, message: "Estas Logueado" });
   }
 );
@@ -50,7 +54,7 @@ router.get("/logout", async (req, res) => {
   try {
     req.session.destroy((err) => {
       if (err) {
-        console.log(err);
+        req.logger.error("Error al desloguearse");
         res.status(400).send({
           status: "error",
           succes: false,
@@ -69,8 +73,9 @@ router.get("/logout", async (req, res) => {
 router.get("/loginFail", (req, res) => {
   console.log(req.session.messages);
   if (req.session.messages.length > 3)
-    return res.status(400).send({ message: "Bloquear intentos" });
-  res.status(400).send({ status: "error", error: "Error de autenticacion" });
+    req.logger.error(`Bloquear intentos de logueo`);
+  //   return res.status(400).send({ message: "Bloquear intentos" });
+  // res.status(400).send({ status: "error", error: "Error de autenticacion" });
 });
 
 router.get("/github", passport.authenticate("github"), (req, res) => {});

@@ -12,6 +12,8 @@ import config from "./config/config.js";
 import { minimistconfig } from "./config/minimist.js";
 import cluster from "cluster";
 import os from "os";
+import compression from "express-compression";
+import { addLogger } from "./middleware/logger.js";
 
 const app = express();
 const CPUs = os.cpus().length;
@@ -49,6 +51,9 @@ if (cluster.isPrimary && minimistconfig.mode.toLowerCase() === "cluster") {
   initializeStrategies();
   app.use(passport.initialize());
   app.use(passport.session());
+  app.use(compression());
+  //Antes de la compresion la pagina /info tenia 600B y despues sólo 1.3kB
+  app.use(addLogger);
 
   //Inicializar el motor
   app.engine("handlebars", handlebars.engine());
