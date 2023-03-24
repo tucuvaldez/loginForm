@@ -13,7 +13,7 @@ import { minimistconfig } from "./config/minimist.js";
 import cluster from "cluster";
 import os from "os";
 import compression from "express-compression";
-import { logger } from "./middleware/logger.js";
+import { addLogger } from "./middleware/logger.js";
 
 const app = express();
 const CPUs = os.cpus().length;
@@ -63,22 +63,25 @@ if (cluster.isPrimary && minimistconfig.mode.toLowerCase() === "cluster") {
   app.use(express.json());
   app.use(express.urlencoded({ extended: true }));
 
+  //Logeer
+  app.use(addLogger);
+
   //Routers
   app.use("/", viewsRouter);
   app.use("/api/sessions", sessionsRouter);
 
   //prueba de logger
 
-  app.get("/test", (req, res) => {
-    logger.log("silly", "yes");
-    logger.log("debug", "yes debug");
-    logger.log("verbose", "hola verbose");
-    logger.log("http", "http");
-    logger.log("info", "hola info");
-    logger.log("warn", "warnn");
-    logger.log("error", "bad");
-    res.send("test funcionando");
-  });
+  // app.get("/test", (req, res) => {
+  //   logger.log("silly", "yes");
+  //   logger.log("debug", "yes debug");
+  //   logger.log("verbose", "hola verbose");
+  //   logger.log("http", "http");
+  //   logger.log("info", "hola info");
+  //   logger.log("warn", "warnn");
+  //   logger.log("error", "bad");
+  //   res.send("test funcionando");
+  // });
 
   console.log(`Proceso worker en PID: ${process.pid}`);
   app.listen(minimistconfig.port, () => {
