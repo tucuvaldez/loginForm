@@ -12,6 +12,6 @@ export default {
     SECRET: process.env.JWT_SECRET,
   },
   session: {
-    SECRET: process.env.SESSION_SECRET
-  }
+    SECRET: process.env.SESSION_SECRET,
+  },
 };

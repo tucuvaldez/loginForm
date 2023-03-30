@@ -4,3 +4,4 @@
 {"level":"error","message":"bad"}
 {"level":"warn","message":"El usuario ya está registrado"}
 {"level":"warn","message":"El usuario ya está registrado"}
+{"level":"warn","message":"Faltan campos por completar"}

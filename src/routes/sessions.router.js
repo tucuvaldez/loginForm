@@ -3,31 +3,56 @@ import passport from "passport";
 import userModel from "../models/User.js";
 import { createHash, validatePassword } from "../utils.js";
 import jwt from "jsonwebtoken";
+import uploader from "../config/upload.js";
+import productModel from "../models/Products.js";
+import transporter from "../middleware/nodemailer.js";
 
 const router = Router();
 
-router.post("/register", async (req, res) => {
-  const { first_name, last_name, email, password } = req.body;
-  if (!first_name || !email || !password)
+router.post("/register", uploader.single("avatar"), async (req, res) => {
+  const file = req.file;
+  console.log(file);
+  const { first_name, last_name, email, password, address, age, phone } =
+    req.body;
+  if (!first_name || !email || !password || !address || !age || !phone) {
     req.logger.warn("Faltan campos por completar");
-  // return res
-  //   .status(400)
-  //   .send({ status: "error", success: false, error: "Valores incompletos" });
+    return res
+      .status(400)
+      .send({ status: "error", success: false, error: "Valores incompletos" });
+  }
   const exists = await userModel.findOne({ email });
-  if (exists)
-    // return res
-    //   .status(400)
-    //   .send({ status: "error", success: false, error: "El usuario ya existe" });
+  if (exists) {
     req.logger.warn("El usuario ya está registrado");
+    return res
+      .status(400)
+      .send({ status: "error", success: false, error: "El usuario ya existe" });
+  }
   const hashedPassword = await createHash(password);
   const result = await userModel.create({
     first_name,
     last_name,
     email,
+    age,
+    address,
+    phone,
     password: hashedPassword,
+    avatar: `${req.protocol}://${req.hostname}:${process.env.PORT}/img/${file.filename}`,
   });
   req.logger.info(`El usuario ${result.first_name} fue registrado con éxito `);
   res.send({ status: "success", success: true, payload: result });
+  let resultMail = await transporter.sendMail({
+    from: "Wine not? <ricvaldezmadegmail.com",
+    to: email,
+    subject: "Fuiste registrado con exito",
+    html: `<div><h1>Hola mi amorcito</h1></div>`,
+    attachments: [
+      {
+        filename: "Perrito.jpg",
+        path: "./src/public/img/perrito.jpg",
+      },
+    ],
+  });
+  console.log(resultMail);
 });
 
 router.post(
@@ -43,6 +68,7 @@ router.post(
       name: user.first_name,
       email: user.email,
       role: user.role,
+      avatar: user.avatar,
     };
     req.logger.info(`El usuario ${user.first_name} fue logueado con éxito`);
     res.send({ status: "success", success: true, message: "Estas Logueado" });

@@ -1,4 +1,5 @@
 import { Router } from "express";
+import productModel from "../models/Products.js";
 
 const router = Router();
 
@@ -10,13 +11,25 @@ router.get("/login", (req, res) => {
   res.render("login");
 });
 
-router.get("/home", (req, res) => {
+router.get("/home", async (req, res) => {
   const loggedIn = req.session.user;
-  req.session.cookie.expires = new Date(Date.now() + 30000);
+  const products = await productModel.find();
+  debugger;
+  req.session.cookie.expires = new Date(Date.now() + 300000);
   if (loggedIn) {
-    res.render("home", { user: req.session.user });
+    res.render("home", { user: loggedIn, product: products });
   } else {
     res.redirect("login");
+  }
+});
+
+router.get("/productos", async (req, res) => {
+  let producto = await productModel.find();
+  // req.session.cookie.expires = new Date(Date.now() + 300000);
+  if (producto) {
+    res.render("productos", { product: producto });
+  } else {
+    res.redirect("/login");
   }
 });
 

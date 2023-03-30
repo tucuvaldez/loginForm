@@ -13,6 +13,18 @@ const schema = new mongoose.Schema({
     required: true,
     unique: true,
   },
+  address: {
+    type: String,
+    required: true,
+  },
+  age: {
+    type: Number,
+    required: true,
+  },
+  phone: {
+    type: Number,
+    required: true,
+  },
   password: {
     type: String,
   },
@@ -20,6 +32,7 @@ const schema = new mongoose.Schema({
     type: String,
     default: "user",
   },
+  avatar: String,
 });
 
 const userModel = mongoose.model(collection, schema);

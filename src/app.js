@@ -5,6 +5,8 @@ import handlebars from "express-handlebars";
 import __dirname from "./utils.js";
 import viewsRouter from "./routes/views.router.js";
 import sessionsRouter from "./routes/sessions.router.js";
+import cartRouter from "./routes/cart.router.js";
+import productsRouter from "./routes/products.router.js";
 import mongoose from "mongoose";
 import passport from "passport";
 import initializeStrategies from "./config/passport.config.js";
@@ -19,6 +21,21 @@ const app = express();
 const CPUs = os.cpus().length;
 const PORT = minimistconfig.port || 8080;
 
+mongoose.set("strictQuery", false);
+const connection = mongoose.connect(config.mongo.MONGO_URL);
+app.use(
+  session({
+    store: MongoStore.create({
+      mongoUrl: config.mongo.MONGO_URL,
+      ttl: 60,
+    }),
+    secret: config.session.SECRET,
+    resave: false,
+    saveUninitialized: false,
+    cookie: { maxAge: 30000 },
+  })
+);
+
 if (cluster.isPrimary && minimistconfig.mode.toLowerCase() === "cluster") {
   try {
     console.log(
@@ -26,6 +43,7 @@ if (cluster.isPrimary && minimistconfig.mode.toLowerCase() === "cluster") {
     );
     for (let i = 0; i < CPUs; i++) {
       cluster.fork();
+      connection;
     }
     cluster.on("exit", (worker) => {
       cluster.fork();
@@ -34,20 +52,8 @@ if (cluster.isPrimary && minimistconfig.mode.toLowerCase() === "cluster") {
     console.log(err);
   }
 } else {
-  mongoose.set("strictQuery", false);
-  const connection = mongoose.connect(config.mongo.MONGO_URL);
-  app.use(
-    session({
-      store: MongoStore.create({
-        mongoUrl: config.mongo.MONGO_URL,
-        ttl: 60,
-      }),
-      secret: config.session.SECRET,
-      resave: false,
-      saveUninitialized: false,
-      cookie: { maxAge: 30000 },
-    })
-  );
+  connection;
+
   initializeStrategies();
   app.use(passport.initialize());
   app.use(passport.session());
@@ -69,7 +75,8 @@ if (cluster.isPrimary && minimistconfig.mode.toLowerCase() === "cluster") {
   //Routers
   app.use("/", viewsRouter);
   app.use("/api/sessions", sessionsRouter);
-
+  app.use("/api/productos", productsRouter);
+  app.use("/api/carritos", cartRouter);
   //prueba de logger
 
   // app.get("/test", (req, res) => {

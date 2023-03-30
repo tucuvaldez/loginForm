@@ -1,0 +1,13 @@
+{{#product}}
+  {{#each this}}
+    <div class="cards">
+      {{!-- <img src={{this.url}} alt="" style="width:100%" /> --}}
+      <div class="container">
+        <h4><b> {{name}} </b></h4>
+        <p> Precio ${{price}}</p>
+        <p>Stock: {{stock}}</p>
+
+      </div>
+    </div>
+  {{/each}}
+{{/product}}
