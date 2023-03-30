@@ -43,8 +43,8 @@ router.post("/register", uploader.single("avatar"), async (req, res) => {
   let resultMail = await transporter.sendMail({
     from: "Wine not? <ricvaldezmadegmail.com",
     to: email,
-    subject: "Fuiste registrado con exito",
-    html: `<div><h1>Hola mi amorcito</h1></div>`,
+    subject: "Registro en Wine not?",
+    html: `<div><h1>Fuiste registrado con exito, muchas gracias!</h1></div>`,
     attachments: [
       {
         filename: "Perrito.jpg",
