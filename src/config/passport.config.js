@@ -4,6 +4,7 @@ import userModel from "../models/User.js";
 import { validatePassword } from "../utils.js";
 import GithubStrategy from "passport-github2";
 import GoogleStrategy from "passport-google-oidc";
+import config from "./config.js";
 
 const LocalStrategy = local.Strategy;
 
@@ -13,6 +14,12 @@ const initializeStrategies = () => {
     new LocalStrategy(
       { usernameField: "email" },
       async (email, password, done) => {
+        if (
+          email === config.app.ADMIN_USER &&
+          password === config.app.ADMIN_PASS
+        ) {
+          return done(null, { _id: 0, first_name: "Admin", role: "admin" });
+        }
         if (!email || !password)
           return done(null, false, { message: "Valores incompletos" });
         const user = await userModel.findOne({ email });

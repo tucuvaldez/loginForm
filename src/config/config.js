@@ -2,9 +2,10 @@ import dotenv from "dotenv";
 
 dotenv.config();
 export default {
-  //   app: {
-  //     PORT: process.env.PORT || 8000,
-  //   },
+  app: {
+    ADMIN_USER: process.env.SUPERADMIN_EMAIL,
+    ADMIN_PWD: process.env.SUPERADMIN_PASSWORD,
+  },
   mongo: {
     MONGO_URL: process.env.MONGO_URL,
   },

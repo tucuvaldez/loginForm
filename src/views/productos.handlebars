@@ -1,13 +1,22 @@
-{{#product}}
-  {{#each this}}
-    <div class="cards">
+{{#if user}}
+
+  {{#each product}}
+
+    <div class="cards col-12 col-md-3">
       {{!-- <img src={{this.url}} alt="" style="width:100%" /> --}}
       <div class="container">
         <h4><b> {{name}} </b></h4>
+        <p>Descripcion {{description}}</p>
         <p> Precio ${{price}}</p>
         <p>Stock: {{stock}}</p>
-
+        {{!-- <a href="/productos/:id"><button id=`{{_id}}`>Ver detalle</button></a> --}}
+        <button id="btnSuma" onclick="addProduct(`{{_id}}`)">+</button>
+        <button id="btnResta" onclick="removeProduct(`{{_id}}`)">-</button>
       </div>
     </div>
+
   {{/each}}
-{{/product}}
+
+{{/if}}
+
+<script src="./js/cart.js"></script>

@@ -1,41 +1,38 @@
 import { Router } from "express";
+import cartModel from "../models/cartSchema.js";
 import productModel from "../models/Products.js";
+import viewsController from "../controllers/views.controller.js";
 
 const router = Router();
 
-router.get("/", (req, res) => {
-  res.render("register");
-});
+router.get("/", viewsController.register);
 
-router.get("/login", (req, res) => {
-  res.render("login");
-});
+router.get("/login", viewsController.login);
 
-router.get("/home", async (req, res) => {
-  const loggedIn = req.session.user;
-  const products = await productModel.find();
-  debugger;
-  req.session.cookie.expires = new Date(Date.now() + 300000);
-  if (loggedIn) {
-    res.render("home", { user: loggedIn, product: products });
-  } else {
-    res.redirect("login");
-  }
-});
+router.get("/home", viewsController.home);
 
-router.get("/productos", async (req, res) => {
+router.get("/productos", viewsController.productos);
+
+router.get("/productos/:id", async (req, res) => {
+  // Get by Id
+  // let id = req.body._id;
+  // console.log(id);
+  // let producto = await productModel.findById();
+  // console.log(producto);
   let producto = await productModel.find();
-  // req.session.cookie.expires = new Date(Date.now() + 300000);
+  console.log(producto);
+  let id = req.body.id;
   if (producto) {
-    res.render("productos", { product: producto });
+    console.log(id);
+    // res.render(`/productos/${id}`, { product: producto });
   } else {
-    res.redirect("/login");
+    res.status(404).send("ID not found");
   }
 });
 
-router.get("/logout", (req, res) => {
-  res.render("logout");
-});
+router.get("/cart", viewsController.cart);
+
+router.get("/logout", viewsController.logout);
 
 router.get("/info", (req, res) => {
   res.json({

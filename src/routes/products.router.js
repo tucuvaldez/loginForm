@@ -4,21 +4,18 @@ import { soloAdmins } from "../utilities/adminMiddleware.js";
 
 const router = Router();
 
-router.get("/", async (req, res) => {
-  let producto = await productModel.find();
-  // req.session.cookie.expires = new Date(Date.now() + 300000);
-  if (producto) {
-    res.render("productos", { product: producto });
-  } else {
-    res.redirect("/login");
-  }
-});
+// router.get("/", async (req, res) => {
+//   let products = await productModel.find();
+//   res.send(JSON.stringify(products));
+// });
 router.get("/:id", async (req, res) => {
-  // Get by Id
-  let id = req.params.id;
+  //Get by Id
+  let id = req.body.id;
+  console.log(id);
   let producto = await productModel.findById(id);
   if (producto) {
-    res.render("productos", { product: producto });
+    console.log(producto);
+    // res.render("productos", { product: producto });
   } else {
     res.status(404).send("ID not found");
   }

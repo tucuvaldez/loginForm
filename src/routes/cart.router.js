@@ -1,36 +1,38 @@
-import MongoCarts from "../public/js/MongoCarts.js";
+// import MongoCarts from "../public/js/MongoCarts.js";
 import { Router } from "express";
 import cartModel from "../models/cartSchema.js";
 
-const carritosApi = new MongoCarts();
+// const carritosApi = new MongoCarts();
 
 // Cart Router Settings
 const router = Router();
 
 router.get("/", async (req, res) => {
-  let carts = await cartModel.find();
+  let user = req.session.user.email;
+  let carts = await cartModel.findOne({ user });
   if (carts) {
     res.json(carts);
   } else {
     res.status(400).send("Error on get");
   }
 });
+
 router.get("/:id", async (req, res) => {
-  let cart = await cartModel.findById(req.params.id);
+  let owner = req.session.user.email;
+  let cart = await cartModel.findById(owner);
   console.log(cart);
   res.json(cart);
 });
+
 router.post("/", async (req, res) => {
   let cart = {
     products: Object.keys(req.body).length === 0 ? [] : req.body,
     owner: req.session.user.email,
   };
-  // let cart = Object.keys(req.body).length === 0 ? [] : req.body;
-  // let owner = req.session.user;
-  let response = await cartModel.saveCart(cart);
-  res.json({ new_cart: cart, response: response });
-  console.log(owner);
+  let response = await cartModel.create(cart);
+  res.render("cart", { new_cart: cart, response: response });
 });
+
 router.delete("/:id", async (req, res) => {
   let id = req.params.id;
   try {
@@ -42,14 +44,15 @@ router.delete("/:id", async (req, res) => {
     res.status(400).send(`${error}`);
   }
 });
+
 router.get("/:id/productos", async (req, res) => {
   let cart = await cartModel.findById(req.params.id);
   cart ? res.json({ products: cart }) : res.status(404).send("ID not found");
 });
 router.post("/:id/productos", async (req, res) => {
   let body = req.body;
-  let product = await productosApi.findById(body.id);
-  let cart = await cartModel.findById(req.params.id);
+  let product = await cartModel.findById(body.id);
+  let cart = await cartModel.findById(body.id);
 
   if (cart && product) {
     cart[0].products.push(product[0]);

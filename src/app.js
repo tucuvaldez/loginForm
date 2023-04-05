@@ -27,12 +27,12 @@ app.use(
   session({
     store: MongoStore.create({
       mongoUrl: config.mongo.MONGO_URL,
-      ttl: 60,
+      // ttl: 60,
     }),
     secret: config.session.SECRET,
     resave: false,
     saveUninitialized: false,
-    cookie: { maxAge: 30000 },
+    // cookie: { maxAge: 30000 },
   })
 );
 
