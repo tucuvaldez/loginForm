@@ -1,22 +1,38 @@
-{{#if user}}
+{{! <h1>Agrega el producto</h1>
+<form id="productForm" class="container d-flex flex-column">
+  <label>Nombre</label>
+  <input name="name" />
+  <label>Tipo (Blanco o Tinto)</label>
+  <input name="type" />
+  <label>Descripcion</label>
+  <input name="description" />
+  <label>Precio</label>
+  <input name="price" />
+  <label>Stock</label>
+  <input name="stock" />
+  <label>Imagen del producto</label>
+  <input type="file" name="Imgurl" />
+  <input type="submit" />
+</form>
 
+<script src="./js/product.js"></script> }}
+{{user.name}}
+<div class="container cards">
   {{#each product}}
 
-    <div class="cards col-12 col-md-3">
-      {{!-- <img src={{this.url}} alt="" style="width:100%" /> --}}
-      <div class="container">
-        <h4><b> {{name}} </b></h4>
-        <p>Descripcion {{description}}</p>
-        <p> Precio ${{price}}</p>
-        <p>Stock: {{stock}}</p>
-        {{!-- <a href="/productos/:id"><button id=`{{_id}}`>Ver detalle</button></a> --}}
-        <button id="btnSuma" onclick="addProduct(`{{_id}}`)">+</button>
-        <button id="btnResta" onclick="removeProduct(`{{_id}}`)">-</button>
-      </div>
+    {{!-- <img src={{this.url}} alt="" style="width:100%" /> --}}
+    <div class="container">
+      <img src={{Imgurl}} alt="" style="" />
+      <h4><b> {{name}} </b></h4>
+      <p>Descripcion {{description}}</p>
+      <p> Precio ${{price}}</p>
+      <p>Stock: {{stock}}</p>
+      {{!-- <a href="/productos/:id"><button id=`{{_id}}`>Ver detalle</button></a> --}}
+      <button id="btnSuma" onclick="addProduct(`{{_id}}`)">+</button>
+      <span id="quantity">0</span>
+      <button id="btnResta" onclick="removeProduct(`{{_id}}`)">-</button>
     </div>
-
   {{/each}}
-
-{{/if}}
+</div>
 
 <script src="./js/cart.js"></script>

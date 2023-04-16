@@ -1,18 +1,17 @@
-import dotenv from "dotenv";
-
-dotenv.config();
 export default {
   app: {
     ADMIN_USER: process.env.SUPERADMIN_EMAIL,
     ADMIN_PWD: process.env.SUPERADMIN_PASSWORD,
   },
   mongo: {
-    MONGO_URL: process.env.MONGO_URL,
+    URL: process.env.MONGO_URL,
   },
   jwt: {
+    COOKIE: process.env.JWT_COOKIE,
     SECRET: process.env.JWT_SECRET,
   },
-  session: {
-    SECRET: process.env.SESSION_SECRET,
+  nodemailer: {
+    GMAIL_PWD: process.env.GMAIL_PWD,
+    GMAIL_USER: process.env.GMAIL_USER,
   },
 };

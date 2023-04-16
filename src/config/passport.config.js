@@ -1,7 +1,7 @@
 import passport from "passport";
 import local from "passport-local";
-import userModel from "../models/User.js";
-import { validatePassword } from "../utils.js";
+import userModel from "../dao/mongo/models/User.js";
+import { validatePassword } from "../services/auth.js";
 import GithubStrategy from "passport-github2";
 import GoogleStrategy from "passport-google-oidc";
 import config from "./config.js";
@@ -16,8 +16,9 @@ const initializeStrategies = () => {
       async (email, password, done) => {
         if (
           email === config.app.ADMIN_USER &&
-          password === config.app.ADMIN_PASS
+          password === config.app.ADMIN_PWD
         ) {
+          //Significa que entró con las credenciales de superadmin
           return done(null, { _id: 0, first_name: "Admin", role: "admin" });
         }
         if (!email || !password)

@@ -1,5 +1,5 @@
-import cartModel from "../models/cartSchema.js";
-import productModel from "../models/Products.js";
+import cartModel from "../dao/mongo/models/cartSchema.js";
+import { cartService, productService, userService } from "../dao/index.js";
 
 const register = (req, res) => {
   res.render("register");
@@ -10,26 +10,21 @@ const login = (req, res) => {
 };
 
 const home = async (req, res) => {
-  const loggedIn = req.session.user;
-  const products = await productModel.find();
-  // req.session.cookie.expires = new Date(Date.now() + 300000);
-  if (loggedIn) {
-    res.render("home", { user: loggedIn, product: products });
-  } else {
-    res.redirect("login");
+  let cart = await cartService.getCartBy({ owner: req.user.email });
+  const products = await productService.getProducts();
+  if (!cart) {
+    cart = cartService.createCart({ owner: req.user.email });
   }
+  req.user.cart = cart;
+  res.render("home", { user: req.user, product: products });
+};
+const profile = (req, res) => {
+  res.render("profile", { user: req.user });
 };
 
 const productos = async (req, res) => {
-  const loggedIn = req.session.user;
-  let products = await productModel.find().lean();
-  let cart = loggedIn.cart;
-
-  if (loggedIn) {
-    res.render("productos", { product: products, user: loggedIn, cart: cart });
-  } else {
-    res.redirect("/login");
-  }
+  let products = await productService.getProducts();
+  res.render("productos", { user: req.user, product: products });
 };
 
 const logout = (req, res) => {
@@ -37,10 +32,10 @@ const logout = (req, res) => {
 };
 
 const cart = async (req, res) => {
-  let user = req.session.user;
-  let cart = await cartModel.find();
+  let user = req.user;
+  let cart = await cartService.getCartBy({ owner: user.email });
   console.log(cart);
-  res.render("cart", { cart: cart[0], user });
+  res.render("cart", { cart: cart, user: user });
 };
 
 export default {
@@ -50,4 +45,5 @@ export default {
   productos,
   logout,
   cart,
+  profile,
 };

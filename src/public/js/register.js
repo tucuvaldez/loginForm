@@ -3,7 +3,7 @@ const form = document.getElementById("registerForm");
 form.addEventListener("submit", async (e) => {
   e.preventDefault();
   const data = new FormData(form);
-  const response = await fetch("api/sessions/register", {
+  const response = await fetch("/api/sessions/register", {
     method: "POST",
     body: data,
   })
@@ -12,6 +12,5 @@ form.addEventListener("submit", async (e) => {
       if (data.success) {
         window.location.assign("login");
       }
-      console.log(data);
     });
 });
