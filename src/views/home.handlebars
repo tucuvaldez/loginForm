@@ -1,7 +1,11 @@
-<h1>Bienvenido {{user.name}}</h1>
-
+<h1>Bienvenido {{user.name}} </h1>
+<p>
+  {{user.cart.owner}}
+</p>
+<img src="{{user.avatar}}" alt="avatar" />
 <form method="get" action="/api/sessions/logout">
   <button id="loggedOut">
     Desloguearse
   </button>
 </form>
+<a href="/productos"><button>Ver los productos</button></a>

@@ -1,18 +1,22 @@
-<h1>Logueate</h1>
-<form action="" id="loginForm">
+<h1 class="container">Logueate</h1>
+<form class="container d-flex flex-column" action="" id="loginForm">
 
   <label>Correo electronico</label>
   <input name="email" id="email" />
   <label>Contraseña</label>
   <input type="password" name="password" id="password" />
-  <input type="submit" />
+  <br />
+  <input type="submit" class="" />
 </form>
-<p>No estas registrado? <a href="/">Registrate</a> </p>
+<div class="container">
 
-<p>Ingresa por:</p>
-<a href="/api/sessions/github"><button>Github</button></a>
+  <p>No estas registrado? <a href="/">Registrate</a> </p>
 
-<br />
-<p>Ingresa por:</p>
-<a href="/api/sessions/google"><button>Google</button></a>
+  <p>Ingresa por:</p>
+  <a href="/api/sessions/github"><button>Github</button></a>
+
+  {{!-- <br />
+  <p>Ingresa por:</p>
+  <a href="/api/sessions/google"><button>Google</button></a>
+</div> --}}
 <script src="./js/login.js"></script>

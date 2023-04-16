@@ -1,11 +1,12 @@
 const form = document.getElementById("loginForm");
 
-form.addEventListener("submit", (evt) => {
+form.addEventListener("submit", async (evt) => {
   evt.preventDefault();
   const data = new FormData(form);
   const obj = {};
   data.forEach((value, key) => (obj[key] = value));
-  fetch("/api/sessions/login", {
+
+  const response = await fetch("/api/sessions/login", {
     method: "POST",
     body: JSON.stringify(obj),
     headers: {
@@ -15,12 +16,10 @@ form.addEventListener("submit", (evt) => {
     .then((result) => result.json())
     .then((data) => {
       if (data.success) {
-        console.log(data);
-        // localStorage.setItem("authToken", data.token);
-        window.location.assign("home");
+        if (data.user.email)
+          window.location.assign("home", { user: data.user });
       } else {
         alert("Error: " + data.error);
       }
-      console.log(data);
     });
 });

@@ -1,39 +1,29 @@
 import { Router } from "express";
+// import cartModel from "../models/cartSchema.js";
+import productModel from "../dao/mongo/models/Products.js";
+import viewsController from "../controllers/views.controller.js";
+import { executePolicies } from "../middlewares/auth.js";
 
 const router = Router();
 
-router.get("/", (req, res) => {
-  res.render("register");
-});
+router.get("/", viewsController.register);
 
-router.get("/login", (req, res) => {
-  res.render("login");
-});
+router.get("/login", viewsController.login);
 
-router.get("/home", (req, res) => {
-  const loggedIn = req.session.user;
-  req.session.cookie.expires = new Date(Date.now() + 30000);
-  if (loggedIn) {
-    res.render("home", { user: req.session.user });
-  } else {
-    res.redirect("login");
-  }
-});
+router.get("/home", executePolicies(["AUTHENTICATED"]), viewsController.home);
 
-router.get("/logout", (req, res) => {
-  res.render("logout");
-});
+router.get(
+  "/productos",
+  executePolicies(["AUTHENTICATED"]),
+  viewsController.productos
+);
 
-router.get("/info", (req, res) => {
-  res.json({
-    server: {
-      "Directorio actual de trabajo ": process.cwd(),
-      "Id del proceso": process.pid,
-      "Version de Node": process.version,
-      "Titulo del proceso": process.title,
-      "Sistema operativo": process.platform,
-      "Uso de la Memoria": process.memoryUsage(),
-    },
-  });
-});
+router.get(
+  "/profile",
+  executePolicies(["AUTHENTICATED"]),
+  viewsController.profile
+);
+
+router.get("/cart", executePolicies(["AUTHENTICATED"]), viewsController.cart);
+
 export default router;

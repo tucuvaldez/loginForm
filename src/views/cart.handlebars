@@ -1,0 +1,10 @@
+<p>{{cart.owner}}</p>
+{{#each cart.products}}
+  <div class="container">
+    <img src={{Imgurl}} alt="" style="" />
+    <h4><b> {{name}} </b></h4>
+    <p>Descripcion {{description}}</p>
+    <p> Precio ${{price}}</p>
+    <p>Stock: {{stock}}</p>
+  </div>
+{{/each}}
