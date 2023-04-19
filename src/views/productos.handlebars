@@ -16,23 +16,43 @@
 </form>
 
 <script src="./js/product.js"></script> }}
-{{user.name}}
-<div class="container cards">
-  {{#each product}}
-
-    {{!-- <img src={{this.url}} alt="" style="width:100%" /> --}}
-    <div class="container">
-      <img src={{Imgurl}} alt="" style="" />
-      <h4><b> {{name}} </b></h4>
-      <p>Descripcion {{description}}</p>
-      <p> Precio ${{price}}</p>
-      <p>Stock: {{stock}}</p>
-      {{!-- <a href="/productos/:id"><button id=`{{_id}}`>Ver detalle</button></a> --}}
-      <button id="btnSuma" onclick="addProduct(`{{_id}}`)">+</button>
-      <span id="quantity">0</span>
-      <button id="btnResta" onclick="removeProduct(`{{_id}}`)">-</button>
-    </div>
-  {{/each}}
-</div>
+<h1>
+  Bienvenido:
+  {{user.name}}
+</h1>
+{{#if product}}
+  <div class="container">
+    {{#each product}}
+      <div class="productsCard">
+        <img src={{Imgurl}} alt="" style="" />
+        <h4><b> {{name}} </b></h4>
+        <p>Descripcion {{description}}</p>
+        <p> Precio ${{price}}</p>
+        <p>Stock: {{stock}}</p>
+        {{#if isValidToAdd}}
+          <a href="http://localhost:8080/api/carts/products/{{_id}}"><button
+            >Agregar al carrito</button></a>
+        {{else}}
+          <button disabled>Ya está en el carrito</button>
+        {{/if}}
+      </div>
+    {{/each}}
+  </div>
+  <div>
+    {{#if paginationData.hasPrevPage}}
+      <a
+        href="http://localhost:8080/productos?page={{paginationData.prevPage}}"
+      ><button>Anterior</button></a>
+    {{/if}}
+    <p>{{paginationData.page}}</p>
+    {{#if paginationData.hasNextPage}}
+      <a
+        href="http://localhost:8080/productos?page={{paginationData.nextPage}}"
+      ><button>Siguiente</button></a>
+    {{/if}}
+  </div>
+{{else}}
+  <h1>No hay productos por mostrar</h1>
+{{/if}}
 
 <script src="./js/cart.js"></script>

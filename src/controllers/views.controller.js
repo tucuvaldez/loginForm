@@ -1,5 +1,4 @@
-import cartModel from "../dao/mongo/models/cartSchema.js";
-import { cartService, productService, userService } from "../dao/index.js";
+import { cartService, productService } from "../dao/index.js";
 
 const register = (req, res) => {
   res.render("register");
@@ -23,8 +22,30 @@ const profile = (req, res) => {
 };
 
 const productos = async (req, res) => {
-  let products = await productService.getProducts();
-  res.render("productos", { user: req.user, product: products });
+  const page = req.query.params || 1;
+  const owner = req.user.email;
+  const pagination = await productService.getProducts({}, page);
+  let products = pagination.docs;
+  const cart = await cartService.getCartBy({ owner });
+  products = products.map((product) => {
+    const exists = cart.products.some(
+      (p) => p._id.toString() === product._id.toString()
+    );
+    return { ...product, isValidToAdd: !exists };
+  });
+  const paginationData = {
+    hasPrevPage: pagination.hasPrevPage,
+    hasNextPage: pagination.hasNextPage,
+    nextPage: pagination.nextPage,
+    prevPage: pagination.prevPage,
+    page: pagination.page,
+  };
+  res.render("productos", {
+    user: req.user,
+    product: products,
+    paginationData,
+    css: "products",
+  });
 };
 
 const logout = (req, res) => {
@@ -32,10 +53,15 @@ const logout = (req, res) => {
 };
 
 const cart = async (req, res) => {
-  let user = req.user;
-  let cart = await cartService.getCartBy({ owner: user.email });
-  console.log(cart);
-  res.render("cart", { cart: cart, user: user });
+  const owner = req.user;
+  let cart = await cartService.getCartBy(
+    {
+      owner: owner.email,
+    },
+    { populate: true }
+  );
+  const products = cart.products.map((prod) => prod._id);
+  res.render("cart", { cart, owner, products, css: "cart" });
 };
 
 export default {

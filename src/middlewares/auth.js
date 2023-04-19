@@ -8,7 +8,10 @@ export const executePolicies = (policies) => {
     if (!token) return res.redirect("/login");
     try {
       const user = jwt.verify(token, config.jwt.SECRET);
-      if (policies[0] === "AUTHENTICATED" || policies.includes(user.role)) {
+      if (
+        policies[0] === "AUTHENTICATED" ||
+        policies.includes(user.role.toUpperCase())
+      ) {
         req.user = user;
         return next();
       } else res.redirect("/login"); //O a una página que diga que no tengo permisos

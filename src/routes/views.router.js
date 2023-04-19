@@ -10,13 +10,9 @@ router.get("/", viewsController.register);
 
 router.get("/login", viewsController.login);
 
-router.get("/home", executePolicies(["AUTHENTICATED"]), viewsController.home);
+router.get("/home", executePolicies(["USER"]), viewsController.home);
 
-router.get(
-  "/productos",
-  executePolicies(["AUTHENTICATED"]),
-  viewsController.productos
-);
+router.get("/productos", executePolicies(["USER"]), viewsController.productos);
 
 router.get(
   "/profile",
@@ -24,6 +20,6 @@ router.get(
   viewsController.profile
 );
 
-router.get("/cart", executePolicies(["AUTHENTICATED"]), viewsController.cart);
+router.get("/cart", executePolicies(["USER"]), viewsController.cart);
 
 export default router;
