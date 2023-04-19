@@ -4,7 +4,14 @@ import mongoose from "mongoose";
 const collection = "Carts";
 //Definimos el schema del documento y modelo para interactuar con la base de datos
 const schema = new mongoose.Schema({
-  products: [{ type: Object, required: true }],
+  products: [
+    {
+      _id: {
+        type: mongoose.SchemaTypes.ObjectId,
+        ref: "Products",
+      },
+    },
+  ],
   owner: { type: String, required: true },
 });
 

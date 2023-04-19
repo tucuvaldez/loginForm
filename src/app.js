@@ -2,10 +2,9 @@ import express from "express";
 import __dirname from "./utils.js";
 import viewsRouter from "./routes/views.router.js";
 import sessionsRouter from "./routes/sessions.router.js";
-// import cartRouter from "./routes/cart.router.js";
+import cartRouter from "./routes/carts.router.js";
 import productsRouter from "./routes/products.router.js";
 import mongoose from "mongoose";
-import passport from "passport";
 import initializeStrategies from "./config/passport.config.js";
 import config from "./config/config.js";
 import cookieParser from "cookie-parser";
@@ -34,7 +33,7 @@ app.use(addLogger);
 app.use("/", viewsRouter);
 app.use("/api/sessions", sessionsRouter);
 app.use("/api/productos", productsRouter);
-// app.use("/api/carritos", cartRouter);
+app.use("/api/carts", cartRouter);
 
 console.log(`Proceso worker en PID: ${process.pid}`);
 app.listen(PORT, () =>

@@ -1,0 +1,35 @@
+.container {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-evenly;
+}
+
+.productsCard {
+  width: 350px;
+  height: max-content;
+  border-radius: 10px;
+  padding: 10px;
+  border: 1px solid black;
+  text-align: center;
+}
+
+.productsCard > img {
+  width: 100%;
+  height: 50%;
+  object-fit: fill;
+}
+.card button {
+  border: none;
+  outline: 0;
+  padding: 12px;
+  color: white;
+  background-color: #000;
+  text-align: center;
+  cursor: pointer;
+  width: 100%;
+  font-size: 18px;
+}
+
+.card button:hover {
+  opacity: 0.7;
+}
