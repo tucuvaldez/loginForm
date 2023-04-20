@@ -38,6 +38,19 @@
       </div>
     {{/each}}
   </div>
+  {{!-- <div>
+    {{#if paginationData.hasPrevPage}}
+      <a
+        href="http://localhost:8080/productos?page={{paginationData.prevPage}}"
+      ><button>Anterior</button></a>
+    {{/if}}
+    <p>{{paginationData.page}}</p>
+    {{#if paginationData.hasNextPage}}
+      <a
+        href="http://localhost:8080/productos?page={{paginationData.nextPage}}"
+      ><button>Siguiente</button></a>
+    {{/if}}
+  </div> --}}
   <div>
     {{#if paginationData.hasPrevPage}}
       <a
