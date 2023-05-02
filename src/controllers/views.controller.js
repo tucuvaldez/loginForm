@@ -22,7 +22,7 @@ const profile = (req, res) => {
 };
 
 const productos = async (req, res) => {
-  const page = req.query.params || 1;
+  const page = req.query.page || 1;
   const owner = req.user.email;
   const pagination = await productService.getProducts({}, page);
   let products = pagination.docs;
