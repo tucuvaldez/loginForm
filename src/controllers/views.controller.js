@@ -40,7 +40,6 @@ const productos = async (req, res) => {
     prevPage: pagination.prevPage,
     page: pagination.page,
   };
-  console.log(paginationData.nextPage);
   res.render("productos", {
     user: req.user,
     product: products,
