@@ -10,6 +10,10 @@ import config from "./config/config.js";
 import cookieParser from "cookie-parser";
 import { addLogger } from "./middlewares/logger.js";
 import handlebars from "express-handlebars";
+import { ApolloServer } from "@apollo/server";
+import { expressMiddleware } from "@apollo/server/express4";
+import typeDefs from "./typeDefs.js";
+import resolvers from "./resolvers.js";
 
 const app = express();
 const PORT = process.env.PORT || 8080;
@@ -26,6 +30,11 @@ app.use(express.urlencoded({ extended: true }));
 app.use(cookieParser());
 initializeStrategies();
 
+const apollo = new ApolloServer({ typeDefs, resolvers });
+
+await apollo.start();
+
+app.use(expressMiddleware(apollo));
 //Logeer
 app.use(addLogger);
 
