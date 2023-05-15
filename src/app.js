@@ -17,7 +17,6 @@ import resolvers from "./resolvers.js";
 
 const app = express();
 const PORT = process.env.PORT || 8080;
-
 const connection = mongoose.connect(config.mongo.URL);
 
 app.engine("handlebars", handlebars.engine());
@@ -30,21 +29,21 @@ app.use(express.urlencoded({ extended: true }));
 app.use(cookieParser());
 initializeStrategies();
 
-const apollo = new ApolloServer({ typeDefs, resolvers });
-
-await apollo.start();
-
-app.use(expressMiddleware(apollo));
 //Logeer
 app.use(addLogger);
 
 //Routers
 app.use("/", viewsRouter);
 app.use("/api/sessions", sessionsRouter);
-app.use("/api/productos", productsRouter);
+app.use("/api/products", productsRouter);
 app.use("/api/carts", cartRouter);
 
-console.log(`Proceso worker en PID: ${process.pid}`);
 app.listen(PORT, () =>
   console.log(`Listening on port: http://localhost:${PORT}`)
 );
+
+// const apollo = new ApolloServer({ typeDefs, resolvers });
+
+// await apollo.start();
+
+// app.use(expressMiddleware(apollo));

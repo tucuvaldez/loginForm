@@ -9,5 +9,6 @@ router.get(
   executePolicies(["USER"]),
   cartsController.insertProdToCart
 );
+router.post("/purchase", executePolicies(["USER"]), cartsController.purchase);
 
 export default router;

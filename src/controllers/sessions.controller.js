@@ -1,7 +1,6 @@
 import jwt from "jsonwebtoken";
 import { createHash, validatePassword } from "../services/auth.js";
 import config from "../config/config.js";
-import transporter from "../services/nodemailer.js";
 import UserDTO from "../dao/DTO/UserDTO.js";
 import { userService } from "../dao/index.js";
 import { addLogger } from "../middlewares/logger.js";
@@ -47,18 +46,7 @@ const register = async (req, res) => {
     };
     const result = await userService.createUser(user);
 
-    transporter.sendMail({
-      from: "Wine not? <ricvaldezmadegmail.com",
-      to: email,
-      subject: "Registro en Wine not?",
-      html: `<div><h1>Fuiste registrado con exito, muchas gracias!</h1></div>`,
-      attachments: [
-        {
-          filename: "Perrito.jpg",
-          path: "../logginsession/src/public/img/perrito.jpg",
-        },
-      ],
-    });
+    
     res.send({
       status: "success",
       success: true,

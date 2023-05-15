@@ -12,7 +12,11 @@ router.get("/login", viewsController.login);
 
 router.get("/home", executePolicies(["USER"]), viewsController.home);
 
-router.get("/productos", executePolicies(["USER"]), viewsController.productos);
+router.get(
+  "/products",
+  executePolicies(["AUTHENTICATED"]),
+  viewsController.products
+);
 
 router.get(
   "/profile",

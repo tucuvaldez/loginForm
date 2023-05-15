@@ -12,19 +12,18 @@
                 "<node_internals>/**"
             ],
             "program": "${workspaceFolder}\\src\\app.js",
-            "env":{
-                "PORT": "8080",
+            "env":{"PORT": "8080",
                 "MONGO_URL":"mongodb+srv://admin:1234@login.atwudct.mongodb.net/comision31840?retryWrites=true&w=majority",
+                
                 "JWT_COOKIE":"G4ll3t4",
                 "JWT_SECRET":"Clav3SecretA",
                 "SESSION_SECRET":"secretWord4321",
                 "SUPERADMIN_EMAIL":"admin@admin",
                 "SUPERADMIN_PASSWORD":"123",
                 "GMAIL_PWD":"iiynonaztvrottce",
-                "GMAIL_USER":"ricvaldezmade@gmail.com",
-            },
-            "restart": true,
-            "runtimeExecutable": "node"
+                "GMAIL_USER":"ricvaldezmade@gmail.com",},
+                "restart": true,
+                "runtimeExecutable": "node"
         }
     ]
 }

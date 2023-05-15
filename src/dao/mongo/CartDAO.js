@@ -1,4 +1,4 @@
-import cartModel from "./models/cartSchema.js";
+import cartModel from "./models/cart.js";
 
 export default class CartDAO {
   getCartBy = (params, option = {}) => {

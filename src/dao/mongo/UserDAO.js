@@ -13,6 +13,10 @@ export default class UserDAO {
     return userModel.create(user);
   };
 
+  updateUser = (id, user) => {
+    return userModel.findByIdAndUpdate(id, { $set: user });
+  };
+
   drop = () => {
     return userModel.collection.drop();
   };

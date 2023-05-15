@@ -15,13 +15,13 @@ const home = async (req, res) => {
     cart = cartService.createCart({ owner: req.user.email });
   }
   req.user.cart = cart;
-  res.render("home", { user: req.user, product: products });
+  res.render("home", { user: req.user, product: products, css: 'home' });
 };
 const profile = (req, res) => {
   res.render("profile", { user: req.user });
 };
 
-const productos = async (req, res) => {
+const products = async (req, res) => {
   const page = req.query.page || 1;
   const owner = req.user.email;
   const pagination = await productService.getProducts({}, page);
@@ -40,7 +40,7 @@ const productos = async (req, res) => {
     prevPage: pagination.prevPage,
     page: pagination.page,
   };
-  res.render("productos", {
+  res.render("products", {
     user: req.user,
     product: products,
     paginationData,
@@ -68,7 +68,7 @@ export default {
   register,
   login,
   home,
-  productos,
+  products,
   logout,
   cart,
   profile,

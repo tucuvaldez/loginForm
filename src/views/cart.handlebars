@@ -2,8 +2,8 @@
 
   {{#if products}}
     <h1>
-      Hola
-      {{owner.name}}, este es tu carrito actual</h1>
+      Hi
+      {{owner.name}}, this is your current cart</h1>
 
     <div class="container">
       {{#each products}}
@@ -15,10 +15,12 @@
 
       {{/each}}
     </div>
-    <a href="/productos">Sigue comprando</a>
+    <button id="purchaseBtn">Buy</button>
+    <a href="/products">Go Shopping</a>
   {{else}}
-    <h1>Aun no hay productos en tu carrito</h1>
-    <a href="/productos">Comienza a comprar</a>
+    <h1>Cart empty</h1>
+    <a href="/products">Start shopping</a>
   {{/if}}
 
 </div>
+<script src="/js/cart.js"></script>
