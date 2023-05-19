@@ -6,6 +6,10 @@ export default class ProductDao {
     //return productModel.find(params).lean();
   };
 
+  getProductBy = (params) => {
+    return productModel.find(params);
+  };
+
   createProduct = (product) => {
     return productModel.create(product);
   };

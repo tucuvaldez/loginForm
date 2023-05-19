@@ -1,6 +1,4 @@
 import { Router } from "express";
-// import cartModel from "../models/cartSchema.js";
-import productModel from "../dao/mongo/models/Products.js";
 import viewsController from "../controllers/views.controller.js";
 import { executePolicies } from "../middlewares/auth.js";
 

@@ -32,13 +32,16 @@ const purchase = async (req, res) => {
     { owner },
     { populate: true }
   );
+
   const products = populatedCart.products.map((product) => {
     return {
       name: product._id.name,
       price: product._id.price,
     };
   });
+
   const total = products.reduce((prev, curr) => prev + curr.price, 0);
+
   const ticket = {
     user: user._id,
     products: cart.products,
