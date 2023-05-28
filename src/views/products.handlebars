@@ -36,9 +36,9 @@
           <p> Price: ${{price}}</p>
           <span class="stock" id="stock_{{_id}}">{{stock}}</span>
           <br>
-          <button class="add" onclick="addQuantity('{{_id}}')" id="{{_id}}"> + </button>
+          <button class="add" onclick="addQuantity('{{_id}}')" id="addBtn{{_id}}"> + </button>
          <span class="quantity" id="quantity{{_id}}">0</span>
-          <button class="subtract" onclick="decreaseQuantity('{{_id}}')" id="{{_id}}"> - </button>
+          <button class="subtract" onclick="decreaseQuantity('{{_id}}')" id="decreaseBtn{{_id}}"> - </button>
           {{#if isValidToAdd}}
             {{!-- <a href="http://localhost:8080/api/carts/products/{{_id}}" id="addToCart{{_id}}"> --}}
             <button onclick="addToCart({{product}})"

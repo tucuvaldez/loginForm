@@ -15,7 +15,7 @@ const home = async (req, res) => {
     cart = cartService.createCart({ owner: req.user.email });
   }
   req.user.cart = cart;
-  res.render("home", { user: req.user, product: products, css: 'home' });
+  res.render("home", { user: req.user, product: products, css: "home" });
 };
 const profile = (req, res) => {
   res.render("profile", { user: req.user });
@@ -42,7 +42,7 @@ const products = async (req, res) => {
   };
   res.render("products", {
     user: req.user,
-    product: products,
+    productsToDisplay: products,
     paginationData,
     css: "products",
   });

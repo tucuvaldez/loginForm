@@ -3,9 +3,15 @@ const addQuantity = (id) => {
   let currentQuantity = parseInt(quantityElement.innerText);
   let stockElement = document.getElementById(`stock_${id}`);
   let currentStock = parseInt(stockElement.innerText);
+  let addBtn = document.getElementById(`addBtn${id}`);
+  let decreaseBtn = document.getElementById(`decreaseBtn${id}`);
   if (currentStock > 0) {
     quantityElement.innerText = currentQuantity + 1;
     stockElement.innerText = currentStock - 1;
+    decreaseBtn.disabled = false;
+  }
+  if (currentStock - 1 == 0) {
+    addBtn.disabled = true;
   }
 };
 
@@ -14,9 +20,15 @@ const decreaseQuantity = (id) => {
   let currentQuantity = parseInt(quantityElement.innerText);
   let stockElement = document.getElementById(`stock_${id}`);
   let currentStock = parseInt(stockElement.innerText);
+  let decreaseBtn = document.getElementById(`decreaseBtn${id}`);
+  let addBtn = document.getElementById(`addBtn${id}`);
   if (currentQuantity > 0) {
     quantityElement.innerText = currentQuantity - 1;
     stockElement.innerText = currentStock + 1;
+    addBtn.disabled = false;
+  }
+  if (currentQuantity - 1 == 0) {
+    decreaseBtn.disabled = true;
   }
 };
 
