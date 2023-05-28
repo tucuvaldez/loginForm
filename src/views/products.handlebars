@@ -21,10 +21,14 @@
     Bienvenido:
     {{user.name}}
   </h1>
-  {{#if product}}
+  {{#if productsToDisplay}}
 
     <div class="container">
-      {{#each product}}
+<button onclick="filter('TINTO')">Red Wine</button>
+<button onclick="filter('BLANCO')">White Wine</button>
+<button onclick="filter(null)">Show All</button>
+      {{#each productsToDisplay}}
+
         <div class="productsCard">
           <img src={{Imgurl}} alt="" style="" />
           <h4><b> {{name}} </b></h4>
@@ -36,7 +40,8 @@
          <span class="quantity" id="quantity{{_id}}">0</span>
           <button class="subtract" onclick="decreaseQuantity('{{_id}}')" id="{{_id}}"> - </button>
           {{#if isValidToAdd}}
-            <a href="http://localhost:8080/api/carts/products/{{_id}}"><button
+            {{!-- <a href="http://localhost:8080/api/carts/products/{{_id}}" id="addToCart{{_id}}"> --}}
+            <button onclick="addToCart({{product}})"
               >Add to cart</button></a>
           {{else}}
             <button disabled>Is in cart</button>

@@ -20,6 +20,13 @@ const decreaseQuantity = (id) => {
   }
 };
 
+const addToCart = (product) => {
+  let prodId = product._id;
+  let quantityElement = document.getElementById(`quantity${id}`);
+  let currentQuantity = parseInt(quantityElement.innerText);
+  window.location.href = `http://localhost:8080/api/carts/products/${prodId}?quantity=${currentQuantity}`;
+};
+
 const button = document.getElementById("purchaseBtn");
 
 button.addEventListener("click", async (e) => {

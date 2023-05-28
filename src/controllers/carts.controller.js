@@ -10,14 +10,15 @@ import { makeid } from "../utils.js";
 
 const insertProdToCart = async (req, res) => {
   const owner = req.user.email;
-  const prodId = req.params.pid;
+  const prodId = req.params.prodId;
+  const quantity = req.params.quantity;
   const cart = await cartService.getCartBy({ owner });
   const exists = cart.products.find((prod) => prod._id.toString() === prodId);
   if (exists)
     return res
       .status(400)
       .send({ status: "error", error: "Product already in cart" });
-  cart.products.push({ _id: prodId });
+  cart.products.push({ _id: prodId, quantity: quantity });
 
   await cartService.updateCart(cart._id, { products: cart.products });
 
@@ -37,10 +38,14 @@ const purchase = async (req, res) => {
     return {
       name: product._id.name,
       price: product._id.price,
+      quantity: product.quantity,
     };
   });
 
-  const total = products.reduce((prev, curr) => prev + curr.price, 0);
+  const total = products.reduce(
+    (prev, curr) => prev + curr.price * quantity,
+    0
+  );
 
   const ticket = {
     user: user._id,
@@ -79,7 +84,7 @@ const purchase = async (req, res) => {
       ${products
         .map(
           (product) =>
-            `<li>${product.name} - $${product.price} 
+            `<li>Quantity:${product.quantity} Product Name:${product.name} - Price per unit: $${product.price}
             </li>`
         )
         .join("")}

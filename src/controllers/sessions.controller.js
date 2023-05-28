@@ -46,7 +46,6 @@ const register = async (req, res) => {
     };
     const result = await userService.createUser(user);
 
-    
     res.send({
       status: "success",
       success: true,
