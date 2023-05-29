@@ -23,26 +23,28 @@
   </h1>
   {{#if productsToDisplay}}
 
+<button onclick="filter('TINTO')">Mostrar Tintos</button>
+<button onclick="filter('BLANCO')">Mostrar Blancos</button>
+<button onclick="filter('')">Mostrar Todos</button>
     <div class="container">
-<button onclick="filter('TINTO')">Red Wine</button>
-<button onclick="filter('BLANCO')">White Wine</button>
-<button onclick="filter(null)">Show All</button>
       {{#each productsToDisplay}}
 
-        <div class="productsCard">
+        <div class="productsCard {{type}}">
+          
           <img src={{Imgurl}} alt="" style="" />
           <h4><b> {{name}} </b></h4>
-          <p>Description: {{description}}</p>
-          <p> Price: ${{price}}</p>
-          <span class="stock" id="stock_{{_id}}">{{stock}}</span>
+         <p class="description">{{description}}</p>
+        <button class="expandBtn" onclick="expandDescription(this)">Show more</button>
+        <button class="collapseBtn" onclick="collapseDescription(this)" style="display: none">Show less</button>
+          <p class="price"> Price: ${{price}}</p>
+          <p>Stock available: <span class="stock" id="stock_{{_id}}">{{stock}}</span></p>
+          
           <br>
           <button class="add" onclick="addQuantity('{{_id}}')" id="addBtn{{_id}}"> + </button>
          <span class="quantity" id="quantity{{_id}}">0</span>
           <button class="subtract" onclick="decreaseQuantity('{{_id}}')" id="decreaseBtn{{_id}}"> - </button>
           {{#if isValidToAdd}}
-            {{!-- <a href="http://localhost:8080/api/carts/products/{{_id}}" id="addToCart{{_id}}"> --}}
-            <button onclick="addToCart({{product}})"
-              >Add to cart</button></a>
+            <button onclick="addToCart('{{_id}}')">Add to cart</button>
           {{else}}
             <button disabled>Is in cart</button>
           {{/if}}
@@ -50,7 +52,7 @@
       {{/each}}
     </div>
 
-    <div>
+    <div class="container pagination">
       {{#if paginationData.hasPrevPage}}
         <a
           href="http://localhost:8080/products?page={{paginationData.prevPage}}"

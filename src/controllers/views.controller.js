@@ -40,6 +40,7 @@ const products = async (req, res) => {
     prevPage: pagination.prevPage,
     page: pagination.page,
   };
+
   res.render("products", {
     user: req.user,
     productsToDisplay: products,
@@ -61,7 +62,7 @@ const cart = async (req, res) => {
     { populate: true }
   );
   const products = cart.products.map((prod) => prod._id);
-  res.render("cart", { cart, owner, products, css: "cart" });
+  res.render("cart", { cart: cart, owner, products, css: "cart" });
 };
 
 export default {

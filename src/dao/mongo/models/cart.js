@@ -10,6 +10,7 @@ const schema = new mongoose.Schema({
         type: mongoose.SchemaTypes.ObjectId,
         ref: "Products",
       },
+      quantity: { type: Number, ref: "Quantity" },
     },
   ],
   owner: { type: String, required: true },

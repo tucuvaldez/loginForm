@@ -6,17 +6,24 @@
       {{owner.name}}, this is your current cart</h1>
 
     <div class="container">
-      {{#each products}}
+      {{#each cart.products}}
+
         <div class="card">
-          <img src={{this.Imgurl}} alt="" style="" />
-          <h4><b> {{this.name}} </b></h4>
-          <p class="price"> Price ${{this.price}}</p>
+          <img src={{this._id.Imgurl}} alt="" style="" />
+          <h4><b> {{this._id.name}} </b></h4>
+          <p>Quantity: {{this.quantity}} products</p>
+          <p class="price">Unit Price ${{this._id.price}}</p>
         </div>
 
       {{/each}}
+
     </div>
-    <button id="purchaseBtn">Buy</button>
-    <a href="/products">Go Shopping</a>
+    <div class="cartBtns">
+
+      <button onclick="clearCart('{{cart._id}}')">Clear Cart</button>
+      <button id="purchaseBtn">Buy</button>
+      <a href="/products">Go Shopping</a>
+    </div>
   {{else}}
     <h1>Cart empty</h1>
     <a href="/products">Start shopping</a>

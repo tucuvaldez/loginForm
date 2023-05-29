@@ -33,22 +33,6 @@ router.get(
   sessionsController.github
 );
 
-//No puedo autenticar con google, porque no tengo session-express
-
-// router.get(
-//   "/google",
-//   passport.authenticate("google", {
-//     scope: ["email", "profile"]
-//   }),
-//   (req, res) => {}
-// );
-
-// router.get(
-//   "/googlecallback",
-//   passport.authenticate("google"),
-//   sessionsController.google
-// );
-
 router.post("/logintoken", sessionsController.logintoken);
 
 export default router;

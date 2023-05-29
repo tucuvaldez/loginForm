@@ -14,6 +14,7 @@ const createProduct = async (req, res) => {
   req.logger.info(`El producto ${product.name} fue creado con éxito`);
   res.send({ status: "success", success: true, payload: product });
 };
+
 const getProducts = async (req, res) => {
   const products = await productService.getProducts();
   res.send({ status: "success", success: true, payload: products });

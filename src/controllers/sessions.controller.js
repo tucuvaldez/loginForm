@@ -85,15 +85,13 @@ const logout = async (req, res) => {
 };
 
 const github = (req, res) => {
-  const user = req.user;
-  req.user = {
-    id: user._id,
-    name: user.firstName,
-    email: user.email,
-    role: user.role,
-  };
-
-  res.render("home", { user: req.user });
+  try {
+    const userToken = UserDTO.getTokenDTO(req.user);
+    const token = jwt.sign(userToken, config.jwt.SECRET, { expiresIn: "1d" });
+    res.cookie(config.jwt.COOKIE, token).redirect("/home");
+  } catch (error) {
+    res.status(500).send({ status: "error", error: "Error del servidor" });
+  }
 };
 
 const logintoken = async (req, res) => {

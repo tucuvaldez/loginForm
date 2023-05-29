@@ -9,7 +9,7 @@ router.get(
   executePolicies(["USER"]),
   cartsController.insertProdToCart
 );
-
+router.get("/:id", executePolicies(["USER"]), cartsController.clearCart);
 
 router.post("/purchase", executePolicies(["USER"]), cartsController.purchase);
 

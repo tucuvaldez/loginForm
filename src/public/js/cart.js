@@ -32,13 +32,17 @@ const decreaseQuantity = (id) => {
   }
 };
 
-const addToCart = (product) => {
-  let prodId = product._id;
+const addToCart = (id) => {
+  let prodId = id;
   let quantityElement = document.getElementById(`quantity${id}`);
   let currentQuantity = parseInt(quantityElement.innerText);
   window.location.href = `http://localhost:8080/api/carts/products/${prodId}?quantity=${currentQuantity}`;
 };
 
+const clearCart = (id) => {
+  let cartId = id;
+  window.location.href = `http://localhost:8080/api/carts/${cartId}`;
+};
 const button = document.getElementById("purchaseBtn");
 
 button.addEventListener("click", async (e) => {

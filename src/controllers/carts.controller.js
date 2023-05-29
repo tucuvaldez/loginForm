@@ -10,19 +10,35 @@ import { makeid } from "../utils.js";
 
 const insertProdToCart = async (req, res) => {
   const owner = req.user.email;
-  const prodId = req.params.prodId;
-  const quantity = req.params.quantity;
+  const prodId = req.params.pid;
+  const quantity = req.query.quantity;
   const cart = await cartService.getCartBy({ owner });
   const exists = cart.products.find((prod) => prod._id.toString() === prodId);
   if (exists)
     return res
       .status(400)
       .send({ status: "error", error: "Product already in cart" });
-  cart.products.push({ _id: prodId, quantity: quantity });
-
-  await cartService.updateCart(cart._id, { products: cart.products });
+  if (quantity <= 0) {
+    return res.status(400).send({
+      status: "error",
+      error: "Can not add to cart products with 0 quantity",
+    });
+  }
+  cart.products.push({ _id: prodId, quantity: parseInt(quantity) });
+  await cartService.updateCart(cart._id, {
+    products: cart.products,
+    quantity: parseInt(quantity),
+  });
 
   res.redirect("/cart");
+};
+
+const clearCart = async (req, res) => {
+  const user = await userService.getUsersBy({ _id: req.user.id });
+  const owner = user.email;
+  let cart = await cartService.getCartBy({ owner });
+  await cartService.updateCart(cart, { products: [] });
+  res.redirect("/products");
 };
 
 const purchase = async (req, res) => {
@@ -43,7 +59,7 @@ const purchase = async (req, res) => {
   });
 
   const total = products.reduce(
-    (prev, curr) => prev + curr.price * quantity,
+    (prev, curr) => prev + curr.price * curr.quantity,
     0
   );
 
@@ -77,14 +93,14 @@ const purchase = async (req, res) => {
   transporter.sendMail({
     from: "Wine not? <ricvaldezmadegmail.com",
     to: user.email,
-    subject: "Purchase in 'Wine not?'",
+    subject: "Purchase in 'HYGGE - Wine not?'",
     html: `<div><h1>Thanks for your purchase with us!</h1></div>
       <p>Your purchased items:</p>
     <ul>
       ${products
         .map(
           (product) =>
-            `<li>Quantity:${product.quantity} Product Name:${product.name} - Price per unit: $${product.price}
+            `<li>Quantity:${product.quantity}<br> Product Name:${product.name} <br> Price per unit: $${product.price}
             </li>`
         )
         .join("")}
@@ -93,14 +109,13 @@ const purchase = async (req, res) => {
     `,
     attachments: [
       {
-        filename: "purchase.jpg",
-        path: "./src/public/img/perrito.jpg",
+        filename: "Hygge.jpg",
+        path: "./src/public/img/logo.png",
       },
     ],
   });
-
   await cartService.updateCart(cart, { products: [] });
   res.send({ status: "success", message: "Purchase successfully" });
 };
 
-export default { insertProdToCart, purchase };
+export default { insertProdToCart, purchase, clearCart };

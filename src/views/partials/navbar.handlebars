@@ -1,23 +1,17 @@
 <nav class="navbar navbar-expand-lg navbar-light bg-light">
   <div class="container-fluid">
-    <a class="navbar-brand" href="/home">Wine not?</a>
-    <button
-      class="navbar-toggler"
-      type="button"
-      data-bs-toggle="collapse"
-      data-bs-target="#navbarNavAltMarkup"
-      aria-controls="navbarNavAltMarkup"
-      aria-expanded="false"
-      aria-label="Toggle navigation"
-    >
-      <span class="navbar-toggler-icon"></span>
-    </button>
-    {{!-- <div class="collapse navbar-collapse" id="navbarNavAltMarkup">
-      <div class="navbar-nav">
-        <a class="nav-link" href="/products?type=TINTO">Red Wine</a>
-        <a class="nav-link" href="/products?type=BLANCO">White Wine</a>
+    <a class="navbar-brand" href="/home"><img
+        src="./img/logo.png"
+        style="max-width:120px"
+      /></a>
 
-      </div>
-    </div> --}}
+    {{#if user}}
+      <form method="get" action="/api/sessions/logout">
+        <button id="loggedOut">
+          Log out
+        </button>
+      </form>
+    {{/if}}
+
   </div>
 </nav>
