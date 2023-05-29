@@ -19,7 +19,7 @@ const initializeStrategies = () => {
           password === config.app.ADMIN_PWD
         ) {
           //Significa que entró con las credenciales de superadmin
-          return done(null, { _id: 0, first_name: "Admin", role: "admin" });
+          return done(null, { _id: 0, name: "Admin", role: "admin" });
         }
         if (!email || !password)
           return done(null, false, { message: "Valores incompletos" });

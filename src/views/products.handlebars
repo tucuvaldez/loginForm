@@ -1,73 +1,84 @@
-{{#if ("user.role == 'admin'")}}
-  <h1>Agrega el producto</h1>
-  <form id="productForm" class="container d-flex flex-column">
-    <label>Nombre</label>
-    <input name="name" />
-    <label>Tipo (Blanco o Tinto)</label>
-    <input name="type" />
-    <label>Descripcion</label>
-    <input name="description" />
-    <label>Precio</label>
-    <input name="price" />
-    <label>Stock</label>
-    <input name="stock" />
-    <label>Imagen del producto</label>
-    <input type="file" name="Imgurl" />
-    <input type="submit" />
-  </form>
+{{!-- {{#if (user.role == 'admin')}} --}}
 
-{{else}}
-  <h1>
-    Bienvenido:
-    {{user.name}}
-  </h1>
-  {{#if productsToDisplay}}
+<h1>Add Products</h1>
+<form id="productForm" class="container d-flex flex-column">
+  <label>Nombre</label>
+  <input name="name" />
+  <label>Tipo (Blanco o Tinto)</label>
+  <input name="type" />
+  <label>Descripcion</label>
+  <input name="description" />
+  <label>Precio</label>
+  <input name="price" />
+  <label>Stock</label>
+  <input name="stock" />
+  <label>Imagen del producto</label>
+  <input type="file" name="Imgurl" />
+  <input type="submit" />
+</form>
 
+<h1>
+  Bienvenido:
+  {{user.name}}
+</h1>
+{{#if productsToDisplay}}
+  {{! 
 <button onclick="filter('TINTO')">Mostrar Tintos</button>
 <button onclick="filter('BLANCO')">Mostrar Blancos</button>
-<button onclick="filter('')">Mostrar Todos</button>
-    <div class="container">
-      {{#each productsToDisplay}}
+<button onclick="filter('')">Mostrar Todos</button> }}
+  <div class="container">
+    {{#each productsToDisplay}}
 
-        <div class="productsCard {{type}}">
-          
-          <img src={{Imgurl}} alt="" style="" />
-          <h4><b> {{name}} </b></h4>
-         <p class="description">{{description}}</p>
+      <div class="productsCard {{type}}">
+
+        <img src={{Imgurl}} alt="" style="" />
+        <h4><b> {{name}} </b></h4>
+        <p class="description">{{description}}</p>
         <button class="expandBtn" onclick="expandDescription(this)">Show more</button>
-        <button class="collapseBtn" onclick="collapseDescription(this)" style="display: none">Show less</button>
-          <p class="price"> Price: ${{price}}</p>
-          <p>Stock available: <span class="stock" id="stock_{{_id}}">{{stock}}</span></p>
-          
-          <br>
-          <button class="add" onclick="addQuantity('{{_id}}')" id="addBtn{{_id}}"> + </button>
-         <span class="quantity" id="quantity{{_id}}">0</span>
-          <button class="subtract" onclick="decreaseQuantity('{{_id}}')" id="decreaseBtn{{_id}}"> - </button>
-          {{#if isValidToAdd}}
-            <button onclick="addToCart('{{_id}}')">Add to cart</button>
-          {{else}}
-            <button disabled>Is in cart</button>
-          {{/if}}
-        </div>
-      {{/each}}
-    </div>
+        <button
+          class="collapseBtn"
+          onclick="collapseDescription(this)"
+          style="display: none"
+        >Show less</button>
+        <p class="price"> Price: ${{price}}</p>
+        <p>Stock available:
+          <span class="stock" id="stock_{{_id}}">{{stock}}</span></p>
 
-    <div class="container pagination">
-      {{#if paginationData.hasPrevPage}}
-        <a
-          href="http://localhost:8080/products?page={{paginationData.prevPage}}"
-        ><button>Preview</button></a>
-      {{/if}}
-      <p>{{paginationData.page}}</p>
-      {{#if paginationData.hasNextPage}}
-        <a
-          href="http://localhost:8080/products?page={{paginationData.nextPage}}"
-        ><button>Next</button></a>
-      {{/if}}
-    </div>
-  {{else}}
-    <h1>No products found</h1>
-  {{/if}}
+        <br />
+        <button class="add" onclick="addQuantity('{{_id}}')" id="addBtn{{_id}}">
+          +
+        </button>
+        <span class="quantity" id="quantity{{_id}}">0</span>
+        <button
+          class="subtract"
+          onclick="decreaseQuantity('{{_id}}')"
+          id="decreaseBtn{{_id}}"
+        > - </button>
+        {{#if isValidToAdd}}
+          <button onclick="addToCart('{{_id}}')">Add to cart</button>
+        {{else}}
+          <button disabled>Is in cart</button>
+        {{/if}}
+      </div>
+    {{/each}}
+  </div>
+
+  <div class="container pagination">
+    {{#if paginationData.hasPrevPage}}
+      <a
+        href="http://localhost:8080/products?page={{paginationData.prevPage}}"
+      ><button>Preview</button></a>
+    {{/if}}
+    <p>{{paginationData.page}}</p>
+    {{#if paginationData.hasNextPage}}
+      <a
+        href="http://localhost:8080/products?page={{paginationData.nextPage}}"
+      ><button>Next</button></a>
+    {{/if}}
+  </div>
+{{else}}
+  <h1>No products found</h1>
 {{/if}}
+
 <script src="./js/cart.js"></script>
 <script src="./js/product.js"></script>
